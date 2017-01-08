@@ -40,12 +40,12 @@ most suited for your case to get it:
 Edit your feeds.conf and add the following to it:
 
     # luci-theme-darkmatter
-    src-git luci-theme-darkmatter git://github.com/apollo-ng/luci-theme-darkmatter.git
+    src-git darkmatter git://github.com/apollo-ng/luci-theme-darkmatter.git
 
 Update your build environment and install the package:
 
-    $ scripts/feeds update luci-theme-darkmatter
-    $ scripts/feeds install luci-theme-darkmatter
+    $ scripts/feeds update darkmatter
+    $ scripts/feeds install darkmatter
     $ make menuconfig
 
 Go to LuCI -> Themes, select luci-theme-darkmatter, exit, save and build as usual.
