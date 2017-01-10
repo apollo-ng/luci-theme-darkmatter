@@ -24,14 +24,14 @@
 
 @font-face {
    font-family: 'icomoon';
-   src: url('../fonts/font.woff') format('woff'),
+   src: url('../fonts/font.woff') format('woff');
    font-weight: normal;
    font-style: normal;
 }
 
 @font-face {
   font-family: "DIN";
-  src: url("../fonts/DIN.woff") format('woff'),
+  src: url("../fonts/DIN.woff") format('woff');
   font-weight: 400;
   font-style: normal;
   font-stretch: normal;
