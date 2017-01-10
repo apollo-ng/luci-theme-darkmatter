@@ -23,19 +23,19 @@
  */
 
 @font-face {
-   font-family: 'icomoon';
-   src: url('../fonts/font.woff') format('woff');
-   font-weight: normal;
-   font-style: normal;
+    font-family: "icomoon";
+    src: url("../fonts/icon.woff") format("woff");
+    font-weight: normal;
+    font-style: normal;
 }
 
 @font-face {
-  font-family: "DIN";
-  src: url("../fonts/DIN.woff") format('woff');
-  font-weight: 400;
-  font-style: normal;
-  font-stretch: normal;
-  unicode-range: U+0020-F000;
+    font-family: "DIN";
+    src: url("../fonts/DIN.woff") format("woff");
+    font-weight: 400;
+    font-style: normal;
+    font-stretch: normal;
+    unicode-range: U+0020-F000;
 }
 
 .cbi-button-up,
