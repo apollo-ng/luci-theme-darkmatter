@@ -26,14 +26,14 @@ most suited for your case to get it:
 
   * Go to System -> Software
   * Paste the following URL into the **Download and install package** field:
-    - https://apollo.open-resource.org/downloads/luci-theme-darkmatter_0.2-beta-1_all.ipk
+    - https://apollo.open-resource.org/downloads/luci-theme-darkmatter_0.2-beta-2_all.ipk
   * Press Enter or click "OK"
 
 #### via shell
 
     $ cd /tmp
-    $ wget https://apollo.open-resource.org/downloads/luci-theme-darkmatter_0.2-beta-1_all.ipk
-    $ opkg install luci-theme-darkmatter_0.2-beta-1_all.ipk
+    $ wget https://apollo.open-resource.org/downloads/luci-theme-darkmatter_0.2-beta-2_all.ipk
+    $ opkg install luci-theme-darkmatter_0.2-beta-2_all.ipk
 
 ### Adding Darkmatter to your own LEDE/OpenWRT Build
 
