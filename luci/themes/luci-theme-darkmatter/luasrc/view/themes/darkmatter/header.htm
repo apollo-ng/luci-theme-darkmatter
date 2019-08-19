@@ -59,6 +59,7 @@
 
     -- send as HTML5
 	http.prepare_content("text/html")
+        controller = controller:gsub("%/$", "")
 
 	local function nodeurl(prefix, name, query)
 		local url = controller .. prefix .. name .. "/"
@@ -138,6 +139,7 @@
             <%-= css %>
         </style>
     <% end -%>
+    <script src="<%=resource%>/cbi.js"></script>
     <script src="<%=resource%>/xhr.js"></script>
 </head>
 
