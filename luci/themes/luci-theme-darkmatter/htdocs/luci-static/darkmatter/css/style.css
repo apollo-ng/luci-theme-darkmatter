@@ -491,7 +491,7 @@ fieldset {
     margin-top: 1rem
 }
 
-fieldset>legend {
+legend {
     display: none !important
 }
 
@@ -520,7 +520,53 @@ fieldset>.panel-title:nth-of-type(1) {
     border-top: none
 }
 
-table {
+/*
+ * Tables.less
+ * Tables for, you guessed it, tabular data
+ * ---------------------------------------- */
+
+.tr { display: table-row; }
+.table[width="33%"], .th[width="33%"], .td[width="33%"] { width: 33%; }
+.table[width="100%"], .th[width="100%"], .td[width="100%"] { width: 100%; }
+
+.table {
+    display: table;
+    width: 100%;
+    margin-bottom: 18px;
+    padding: 0;
+    font-size: 13px;
+    border-collapse: collapse;
+    position: relative;
+}
+
+.table .th, .table .td {
+    display: table-cell;
+    vertical-align: middle;
+    padding: 10px 10px 9px;
+    line-height: 18px;
+    text-align: left;
+}
+
+.table .tr:first-child .th {
+    padding-top: 9px;
+    font-weight: bold;
+    vertical-align: top;
+}
+
+.tr.placeholder {
+    height: calc(3em + 20px);
+}
+
+.tr.placeholder > .td {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    text-align: center;
+    line-height: 3em;
+}
+
+.table {
     border-spacing: 0;
     border-collapse: collapse;
     border: none;
@@ -528,22 +574,17 @@ table {
 }
 
 .cbi-rowstyle-1,
-.cbi-rowstyle-2,
-table>tbody>tr {
+.cbi-rowstyle-2 {
     border-bottom: 1px solid #1f1e1a
 }
 
-table>tbody>tr>td,
-table>tbody>tr>th,
-table>tfoot>tr>td,
-table>tfoot>tr>th,
-table>thead>tr>td,
-table>thead>tr>th {
+.table .tr .td,
+.table .tr .th {
     padding: .5rem;
     white-space: nowrap
 }
 
-table>tbody>tr {
+.table .tr {
     border-top: 1px solid #3f3e3a
 }
 
@@ -557,7 +598,7 @@ table>tbody>tr {
     border-top: 1px solid #3f3e3a
 }
 
-table>tbody>tr:nth-last-child(1) {
+.table .tr:nth-last-child(1) {
     border-bottom: none
 }
 
@@ -824,7 +865,7 @@ form.inline+form.inline {
 }
 
 .cbi-value {
-    padding: .3rem 1rem;
+    padding: .3rem 0;
     display: inline-block;
     width: 100%
 }
@@ -899,12 +940,16 @@ td>.ifacebadge {
 
 .ifacebadge>img {
     float: right;
-    margin: 0 .3rem
+    margin: 0 .3rem;
+    width: 16px;
+    height: 16px;
+    vertical-align: middle;
 }
 
 .cbi-input-textarea {
     width: 100%;
-    min-height: 14rem;
+    min-height: 16rem;
+    min-width: 54rem;
     padding: .8rem;
     font-size: .8rem;
     margin-top: 10px
@@ -1030,7 +1075,18 @@ svg {
 
 .ifacebox {
     border: 1px solid #0f0e0a;
-    margin: 5px
+    margin: 5px;
+    background-color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    background-image: linear-gradient(#fff, #fff 25%, #f9f9f9);
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+    border-radius: 4px;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+    display: inline-flex;
+    flex-direction: column;
+    line-height: 1.2em;
+    min-width: 100px;
 }
 
 .ifacebox-head {
@@ -1044,8 +1100,64 @@ svg {
     background: #1f1e1a;
     min-height: 40px;
     line-height: 18px;
-    padding-top: 12px;
-    padding-bottom: 8px
+}
+
+/* --- network-status --- */
+.network-status-table {
+}
+
+.network-status-table .ifacebox {
+}
+
+.network-status-table .ifacebox-body {
+    height: 100%;
+    text-align: left;
+}
+
+.network-status-table .ifacebox-body > span {
+    display: block;
+        margin: .5em 1.5em
+}
+
+#dsl_status_table .ifacebox-body > span > strong {
+    display: inline-block;
+    min-width: 35%;
+}
+
+.ifacebadge.large,
+.network-status-table .ifacebox-body .ifacebadge {
+    display: inline-flex;
+    flex: 1;
+    padding: .25em;
+    min-width: 220px;
+    width: 100%;
+}
+
+.cbi-tooltip-container {
+    cursor: help;
+}
+
+.cbi-tooltip {
+    position: absolute;
+    z-index: 1000;
+    left: -1000px;
+    opacity: 0;
+    transition: opacity .25s ease-out;
+}
+
+.cbi-tooltip-container:hover .cbi-tooltip:not(:empty) {
+    left: auto;
+    opacity: 1;
+    transition: opacity .25s ease-in;
+}
+
+.zonebadge .cbi-tooltip {
+    padding: 1px;
+    background: inherit;
+    margin: -1.6em 0 0 -5px;
+    border-radius: 3px;
+    pointer-events: none;
+    box-shadow: 0 0 3px #444;
 }
 
 .cbi-image-button {
@@ -1067,6 +1179,27 @@ svg {
     min-width: 10rem;
     margin-top: .3rem
 }
+
+.zone-forwards {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.zone-forwards > * {
+    flex: 1 1 40%;
+    padding: 1px;
+}
+
+.zone-forwards > span {
+    flex-basis: 10%;
+    text-align: center;
+}
+
+.zone-forwards .zone-src,
+.zone-forwards .zone-dest {
+    display: flex;
+}
+
 
 .cbi-value-field .cbi-input-checkbox,
 .cbi-value-field .cbi-input-radio {
