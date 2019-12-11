@@ -642,6 +642,8 @@ td>table>tbody>tr>td {
 }
 
 .cbi-button {
+    height: 1.65rem;
+    margin-top: -0.35rem;
     -webkit-appearance: none;
     display: inline-block;
     cursor: pointer;
@@ -836,7 +838,11 @@ form.inline+form.inline {
 .cbi-value-description,
 .cbi-value-field {
     display: table-cell;
-    line-height: 1.25
+    line-height: 1.25;
+}
+.table .td.cbi-value-field {
+    padding-left: 1px;
+    padding-right: 1px;
 }
 
 .cbi-value-helpicon>img {
@@ -1135,14 +1141,21 @@ svg {
 
 .cbi-tooltip-container {
     cursor: help;
+    display: inline-block;
+    vertical-align: text-top;
 }
 
 .cbi-tooltip {
+    display: block;
     position: absolute;
     z-index: 1000;
     left: -1000px;
     opacity: 0;
     transition: opacity .25s ease-out;
+    width: auto !important;
+    padding: .75em;
+    text-align: left;
+    margin-left: 1.25em;
 }
 
 .cbi-tooltip-container:hover .cbi-tooltip:not(:empty) {
