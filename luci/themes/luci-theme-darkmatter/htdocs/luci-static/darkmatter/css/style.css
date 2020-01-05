@@ -868,7 +868,7 @@ form.inline+form.inline {
 }
 
 .cbi-value {
-    padding: 0 0;
+    padding: .3rem 0;
     display: inline-block;
     width: 100%
 }
