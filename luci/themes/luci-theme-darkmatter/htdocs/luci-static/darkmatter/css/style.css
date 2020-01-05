@@ -823,8 +823,8 @@ form.inline+form.inline {
 .cbi-section-remove:nth-of-type(2n) {
     background-color: #3f3e3a
 }
-.cbi-section-node>.cbi-value:nth-of-type(2n){
-	background-color: #2f2e2a
+.cbi-section-node{
+	background: #2f2e2a
 }
 .cbi-section-node-tabbed {
     padding: 0;
