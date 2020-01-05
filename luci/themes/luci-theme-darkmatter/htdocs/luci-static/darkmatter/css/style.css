@@ -866,7 +866,10 @@ form.inline+form.inline {
     padding-right: 2rem;
     display: table-cell
 }
-
+.target.jump {
+	color: rgba(117, 137, 12, .75);
+	border-bottom: none;
+}
 .cbi-value {
     padding: .3rem 0;
     display: inline-block;
@@ -929,7 +932,7 @@ form.inline+form.inline {
 .cbi-value-field .cbi-input-select {
     min-width: 15rem
 }
-
+.center .ifacebadge,
 .cbi-tooltip .ifacebadge {
     display: inline-flex;
     padding: .5rem 1rem;
@@ -944,7 +947,7 @@ form.inline+form.inline {
     height: 16px;
     vertical-align: middle;
 }
-
+ 
 .cbi-input-textarea {
     width: 100%;
     min-width: 54rem;
