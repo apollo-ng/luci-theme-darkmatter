@@ -32,85 +32,10 @@
 	local disp = require "luci.dispatcher"
 
 	local boardinfo = util.ubus("system", "board")
-
-	local request  = disp.context.path
-	local request2 = disp.context.request
-
-	local category = request[1]
-	local cattree  = category and disp.node(category)
-
-	local leaf = request2[#request2]
-
-	local tree = disp.node()
 	local node = disp.context.dispatched
-
-	local categories = disp.node_childs(tree)
-
-	local c = tree
-	local i, r
-
-	-- tag all nodes leading to this page
-	for i, r in ipairs(request) do
-		if c.nodes and c.nodes[r] then
-			c = c.nodes[r]
-			c._menu_selected = true
-		end
-	end
 
     -- send as HTML5
 	http.prepare_content("text/html")
-        controller = controller:gsub("%/$", "")
-
-	local function nodeurl(prefix, name, query)
-		local url = controller .. prefix .. name .. "/"
-		if query then
-			url = url .. http.build_querystring(query)
-		end
-		return pcdata(url)
-	end
-
-	local function subtree(prefix, node, level)
-		if not level then
-			level = 1
-		end
-
-		local childs = disp.node_childs(node)
-		if #childs > 0 then
-
-            if level > 2 then
-%>
-	<ul class="tabs">
-		<%
-            end
-
-			local selected_node
-			local selected_name
-			local i, v
-
-			for i, v in ipairs(childs) do
-				local nnode = node.nodes[v]
-				if nnode._menu_selected then
-					selected_node = nnode
-					selected_name = v
-				end
-                if level > 2 then
-		%>
-			<li class="tabmenu-item-<%=v%><%- if nnode._menu_selected or (node.leaf and v == leaf) then %> active<% end %>">
-			    <a href="<%=nodeurl(prefix, v, nnode.query)%>"><%=striptags(translate(nnode.title))%></a>
-			</li>
-		<%      end
-			end
-
-            if level > 2 then
-		%>
-	</ul>
-<%          end
-
-			if selected_node then
-				subtree(prefix .. selected_name .. "/", selected_node, level + 1)
-			end
-		end
-	end
 -%>
 <!DOCTYPE html>
 <html lang="<%=luci.i18n.context.lang%>">
@@ -141,6 +66,106 @@
     <% end -%>
     <script src="<%=resource%>/cbi.js"></script>
     <script src="<%=resource%>/xhr.js"></script>
+	<script src="<%=url('admin/translations', luci.i18n.context.lang)%>?v=git-git-19.235.09215-0794e4b"></script>
+	<script type="text/javascript">//<![CDATA[
+		(function() {
+			function get_children(node) {
+				var children = [];
+				for (var k in node.children) {
+					if (!node.children.hasOwnProperty(k))
+						continue;
+					if (!node.children[k].satisfied)
+						continue;
+					if (!node.children[k].hasOwnProperty('title'))
+						continue;
+					children.push(Object.assign(node.children[k], { name: k }));
+				}
+				return children.sort(function(a, b) {
+					return ((a.order || 1000) - (b.order || 1000));
+				});
+			}
+			function render_mainmenu(tree, url, level) {
+				var l = (level || 0) + 1,
+				    ul = E('ul', { 'class': level ? 'slide-menu' : 'nav' }),
+				    children = get_children(tree);
+				if (children.length == 0 || l > 2)
+					return E([]);
+				for (var i = 0; i < children.length; i++) {
+					var submenu = render_mainmenu(children[i], url + '/' + children[i].name, l),
+					    hasChildren = submenu.children.length;
+					ul.appendChild(E('li', { 'class': hasChildren ? 'slide' : null }, [
+						E('a', {
+							'href': hasChildren ? '#' : L.url(url, children[i].name),
+							'class': hasChildren ? 'menu' : null,
+							'data-title': hasChildren ? _(children[i].name) : _(children[i].name),
+						}, [ _(children[i].title) ]),
+						submenu
+					]));
+				}
+				if (l == 1) {
+					var container = document.querySelector('#mainmenu');
+					container.appendChild(ul);
+					container.style.display = '';
+				}
+				return ul;
+			}
+			function render_modemenu(tree) {
+				var ul = document.querySelector('#modemenu'),
+				    children = get_children(tree);
+				for (var i = 0; i < children.length; i++) {
+					var isActive = (L.env.requestpath.length ? children[i].name == L.env.requestpath[0] : i == 0);
+					ul.appendChild(E('li', {}, [
+						E('a', {
+							'href': L.url(children[i].name),
+							'class': isActive ? 'active' : null
+						}, [ _(children[i].title) ])
+					]));
+					if (isActive)
+						render_mainmenu(children[i], children[i].name);
+				}
+				if (ul.children.length > 1)
+					ul.style.display = '';
+			}
+			function render_tabmenu(tree, url, level) {
+				var container = document.querySelector('#tabmenu'),
+				    l = (level || 0) + 1,
+				    ul = E('ul', { 'class': 'tabs' }),
+				    children = get_children(tree),
+				    activeNode = null;
+				if (children.length == 0)
+					return E([]);
+				for (var i = 0; i < children.length; i++) {
+					var isActive = (L.env.dispatchpath[l + 2] == children[i].name),
+					    activeClass = isActive ? ' active' : '',
+					    className = 'tabmenu-item-%s %s'.format(children[i].name, activeClass);
+					ul.appendChild(E('li', { 'class': className }, [
+						E('a', { 'href': L.url(url, children[i].name) }, [ _(pcdata(children[i].title)) ] )
+					]));
+					if (isActive)
+						activeNode = children[i];
+				}
+				container.appendChild(ul);
+				container.style.display = '';
+				if (activeNode)
+					container.appendChild(render_tabmenu(activeNode, url + '/' + activeNode.name, l));
+				return ul;
+			}
+			document.addEventListener('luci-loaded', function(ev) {
+				var tree = <%= luci.http.write_json(luci.dispatcher.context.authsession and luci.dispatcher.menu_json() or {}) %>,
+				    node = tree,
+				    url = '';
+				render_modemenu(tree);
+				if (L.env.dispatchpath.length >= 3) {
+					for (var i = 0; i < 3 && node; i++) {
+						node = node.children[L.env.dispatchpath[i]];
+						url = url + (url ? '/' : '') + L.env.dispatchpath[i];
+					}
+					if (node)
+						render_tabmenu(node, url);
+				}
+			});
+		})();
+	//]]></script>
 </head>
 
 <body class="lang_<%=luci.i18n.context.lang%> <%- if node then %><%= striptags( node.title ) %><%- end %> <% if luci.dispatcher.context.authsession then %>logged-in<% end %>">
@@ -150,88 +175,18 @@
 		<span class="showSide"></span>
 		<a class="brand" href="#"><%=boardinfo.hostname or "?"%></a>
 		<div class="pull-right">
-		<% if #categories > 1 then %>
-		<ul class="breadcrumb pull-right" id="modemenu">
-				<% for i, r in ipairs(categories) do %>
-				<li<% if request[1] == r then %> class="active"<%end%>><a class="label" href="<%=controller%>/<%=r%>/"><%=striptags(translate(tree.nodes[r].title))%></a></li>
-				<% end %>
-		</ul>
-		<% end %>
-		<%
-		-- calculate the number of unsaved changes
-		if tree.nodes[category] and tree.nodes[category].ucidata then
-			local ucichanges = 0
-			for i, j in pairs(require("luci.model.uci").cursor():changes()) do
-				for k, l in pairs(j) do
-					for m, n in pairs(l) do
-						ucichanges = ucichanges + 1;
-					end
-				end
-			end
-			%>
-			<% if ucichanges > 0 then %>
-			<a class="label notice" href="<%=controller%>/<%=category%>/uci/changes?redir=<%=http.urlencode(http.formvalue("redir") or REQUEST_URI)%>"><span class="mobile-hide"><%:Unsaved Changes%>: </span><%=ucichanges%></a>
-			<% end %>
+		<ul class="breadcrumb pull-right" id="modemenu" style="display:none"></ul>
 			<span id="xhr_poll_status" style="display:none" onclick="XHR.running() ? XHR.halt() : XHR.run()">
 				<span class="label success" id="xhr_poll_status_on"><span class="mobile-hide"><%:Auto Refresh%> </span><%:on%></span>
 				<span class="label" id="xhr_poll_status_off" style="display:none"><span class="mobile-hide"><%:Auto Refresh%> </span><%:off%></span>
 			</span>
-		<% end %>
 		</div>
 	</div>
 </header>
 
  <div class="main">
-	 <div style="" class="loading"><span><div class="loading-img"></div>Loading...</span></div>
-	 <div class="main-left">
-		 <ul class="nav">
-			 <%-
-			 local function submenu(prefix, node)
-			 local childs = disp.node_childs(node)
-			 if #childs > 0 then
-			 %>
-			 <ul class="slide-menu">
-				 <%-
-				 for i, r in ipairs(childs) do
-				 local nnode = node.nodes[r]
-				 local href  = controller .. prefix .. r ..
-				 (nnode.query and http.build_querystring(nnode.query) or "")
-				 %>
-				 <li><a data-title="<%=pcdata(striptags(nnode.title))%>" href="<%=pcdata(href)%>"><%=pcdata(striptags(translate(nnode.title)))%></a></li>
-				 <%-
-				 end
-				 %>
-			 </ul>
-			 <%-
-			 end
-			 end
-
-			 childs = disp.node_childs(cattree)
-
-			 if #childs > 0 then
-			 for i, r in ipairs(childs) do
-			 local nnode = cattree.nodes[r]
-			 local href  = controller .. "/" .. category .. "/" .. r ..
-			 (nnode.query and http.build_querystring(nnode.query) or "")
-			 local grandchildren = disp.node_childs(nnode)
-
-			 if #grandchildren > 0 then
-			 %>
-			 <li class="slide">
-				 <a class="menu" data-title="<%=pcdata(striptags(nnode.title))%>" href="#"><%=pcdata(striptags(translate(nnode.title)))%></a>
-				 <%- submenu("/" .. category .. "/" .. r .. "/", nnode) %>
-			 </li>
-			 <%          else %>
-			 <li>
-				 <a data-title="<%=pcdata(striptags(nnode.title))%>" href="<%=pcdata(href)%>"><%=pcdata(striptags(translate(nnode.title)))%></a>
-			 </li>
-			 <%
-			 end
-			 end
-			 end
-			 %>
-		 </ul>
-	 </div>
+	 <div style="" class="loading"><span><div class="loading-img"></div><%:Collecting data...%></span></div>
+	<div class="main-left" id="mainmenu" style="display:none"></div>
 	 <div class="main-right">
 		 <div class="darkMask"></div>
 		 <div id="maincontent">
@@ -240,7 +195,15 @@
 					 <div class="alert-message warning">
 						 <h4><%:No password set!%></h4>
 						 <%:There is no password set on this router. Please configure a root password to protect the web interface and enable SSH.%><br>
-						 <a href="<%=pcdata(luci.dispatcher.build_url("admin/system/admin"))%>"><%:Go to password configuration...%></a>
+						 <% if disp.lookup("admin/system/admin") then %>
+							 <div class="right"><a class="btn" href="<%=url("admin/system/admin")%>"><%:Go to password configuration...%></a></div>
+						 <% end %>
 					 </div>
 				 <%- end -%>
-				 <% if category then subtree("/" .. category .. "/", cattree) end %>
+				 <noscript>
+					 <div class="alert-message warning">
+						<h4><%:JavaScript required!%></h4>
+						<p><%:You must enable JavaScript in your browser or LuCI will not work properly.%></p>
+					</div>
+				</noscript>
+				<div id="tabmenu" style="display:none"></div>
