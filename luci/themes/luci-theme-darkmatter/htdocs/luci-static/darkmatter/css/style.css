@@ -467,7 +467,7 @@ h3 {
     margin: 2rem 0 0
 }
 
-fieldset {
+.cbi-section {
     margin-bottom: 1rem;
     border: 1px solid rgba(37, 35, 35, .25);
     font-weight: 400;
@@ -2379,4 +2379,5 @@ body.modal-overlay-active #modal_overlay {
  white-space:pre;
  overflow:hidden;
  text-overflow:ellipsis
+}
 }
