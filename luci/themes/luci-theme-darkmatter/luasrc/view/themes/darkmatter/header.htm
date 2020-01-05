@@ -139,7 +139,7 @@
 					    activeClass = isActive ? ' active' : '',
 					    className = 'tabmenu-item-%s %s'.format(children[i].name, activeClass);
 					ul.appendChild(E('li', { 'class': className }, [
-						E('a', { 'href': L.url(url, children[i].name) }, [ _(pcdata(children[i].title)) ] )
+						E('a', { 'href': L.url(url, children[i].name) }, [ _(children[i].title) ] )
 					]));
 					if (isActive)
 						activeNode = children[i];

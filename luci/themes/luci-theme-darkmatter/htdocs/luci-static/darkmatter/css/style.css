@@ -186,11 +186,6 @@ footer {
     text-align: center
 }
 
-.main-right,
-.main>.main-left>.nav>li a {
-    text-shadow: -1px 0 #1f1e1a, 0 1px #1f1e1a, 1px 0 #1f1e1a, 0 -1px #1f1e1a, 0 0 3px #1f1e1a
-}
-
 footer>a {
     color: #aaa
 }
@@ -602,6 +597,11 @@ fieldset>.panel-title:nth-of-type(1) {
     border-bottom: none
 }
 
+/*
+.cbi-section .table .tr:nth-of-type(2n){
+	background: #2f2e2a
+}
+*/
 #conns>div,
 #membuff>div,
 #memfree>div,
@@ -643,7 +643,6 @@ td>table>tbody>tr>td {
 
 .cbi-button {
     height: 1.65rem;
-    margin-top: -0.35rem;
     -webkit-appearance: none;
     display: inline-block;
     cursor: pointer;
@@ -847,11 +846,7 @@ form.inline+form.inline {
     padding-right: 1px;
 }
 
-.cbi-value-helpicon>img {
-    display: none
-}
-
-.cbi-value-helpicon:before {
+.cbi-value-description:before {
     font-family: icomoon;
     color: rgba(117, 137, 12, .5);
     content: "\f059"
@@ -864,7 +859,7 @@ form.inline+form.inline {
 
 .cbi-value-title {
     word-wrap: break-word;
-    padding-top: .6rem;
+    padding-top: 0.5%;
     width: 23rem;
     float: left;
     text-align: right;
@@ -935,15 +930,11 @@ form.inline+form.inline {
     min-width: 15rem
 }
 
-.ifacebadge {
+.cbi-tooltip .ifacebadge {
     display: inline-flex;
     padding: .5rem 1rem;
     background: rgba(15, 14, 10, .8);
     box-shadow: inset 0 0 42px 0 #000
-}
-
-td>.ifacebadge {
-    font-size: .9rem
 }
 
 .ifacebadge>img {
@@ -956,7 +947,6 @@ td>.ifacebadge {
 
 .cbi-input-textarea {
     width: 100%;
-    min-height: 16rem;
     min-width: 54rem;
     padding: .8rem;
     font-size: .8rem;
@@ -1088,7 +1078,6 @@ svg {
     text-align: center;
     white-space: nowrap;
     background-image: linear-gradient(#fff, #fff 25%, #f9f9f9);
-    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
     border-radius: 4px;
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
     display: inline-flex;
@@ -1238,7 +1227,9 @@ svg {
     margin-left: .4rem;
     margin-top: -.5rem
 }
-
+.cbi-value-field>br{
+	display: none;
+}
 .cbi-section-table-row>.cbi-value-field .cbi-input-select {
     min-width: 7rem
 }
@@ -2357,4 +2348,32 @@ body.modal-overlay-active #modal_overlay {
 
 .cbi-dropdown[open] .zonebadge {
 	width: auto;
+}
+
+.cbi-progressbar {
+ border:1px solid #000;
+ border-radius:3px;
+ position:relative;
+ min-width:170px;
+ height:20px;
+ background:#1f1e1a;
+ margin:4px 0
+}
+.cbi-progressbar > div {
+ background:#5f6e10;
+ height:100%;
+ transition:width .25s ease-in;
+ width:0%
+}
+.cbi-progressbar::after {
+ position:absolute;
+ bottom:0;
+ top:0;
+ right:0;
+ left:0;
+ text-align:center;
+ content:attr(title);
+ white-space:pre;
+ overflow:hidden;
+ text-overflow:ellipsis
 }
