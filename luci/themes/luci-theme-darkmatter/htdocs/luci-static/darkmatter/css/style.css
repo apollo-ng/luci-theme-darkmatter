@@ -1150,6 +1150,8 @@ svg {
     padding: .75em;
     text-align: left;
     margin-left: 1.25em;
+	color: white;
+	background: rgba(0, 0, 0, .8);
 }
 
 .cbi-tooltip-container:hover .cbi-tooltip:not(:empty) {
