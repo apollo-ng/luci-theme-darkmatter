@@ -549,6 +549,9 @@ h3 {
 .tr.placeholder {
     height: calc(3em + 20px);
 }
+.placeholder {
+	background: #2f2e2a !important;
+}
 
 .tr.placeholder > .td {
     position: absolute;
