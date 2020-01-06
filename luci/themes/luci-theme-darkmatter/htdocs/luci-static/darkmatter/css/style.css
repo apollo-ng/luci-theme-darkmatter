@@ -12,7 +12,7 @@ header>.container>.brand {
 }
 
 .main,
-.panel-title,
+.cbi-section>h3,
 header,
 table {
     width: 100%
@@ -458,15 +458,15 @@ h2 {
     padding-bottom: 12px
 }
 
-.panel-title,
+.cbi-section>h3,
 h3 {
     font-size: 1.4rem
 }
-
+/*
 h3 {
     margin: 2rem 0 0
 }
-
+*/
 .cbi-section {
     margin-bottom: 1rem;
     border: 1px solid rgba(37, 35, 35, .25);
@@ -501,7 +501,7 @@ fieldset>button {
     margin: 8px
 }
 
-.panel-title {
+h3 {
     display: block;
     line-height: 2.2rem;
     padding-bottom: 0;
@@ -510,8 +510,12 @@ fieldset>button {
     border-bottom: 1px solid #1f1e1a;
     border-top: 1px solid #1f1e1a
 }
-
-fieldset>.panel-title:nth-of-type(1) {
+/*
+.cbi-section>div {
+    padding: 10px 10px
+}
+*/
+.cbi-section>div {
     border-top: none
 }
 
@@ -524,30 +528,19 @@ fieldset>.panel-title:nth-of-type(1) {
 .table[width="33%"], .th[width="33%"], .td[width="33%"] { width: 33%; }
 .table[width="100%"], .th[width="100%"], .td[width="100%"] { width: 100%; }
 
-.table {
-    display: table;
-    width: 100%;
-    margin-bottom: 18px;
-    padding: 0;
-    font-size: 13px;
-    border-collapse: collapse;
-    position: relative;
-}
-
-.table .th, .table .td {
+.table .th,
+.table .td {
     display: table-cell;
     vertical-align: middle;
-    padding: 10px 10px 9px;
-    line-height: 18px;
-    text-align: left;
+	text-align: center;
 }
-
+/*
 .table .tr:first-child .th {
     padding-top: 9px;
     font-weight: bold;
     vertical-align: top;
 }
-
+*/
 .tr.placeholder {
     height: calc(3em + 20px);
 }
@@ -563,9 +556,17 @@ fieldset>.panel-title:nth-of-type(1) {
 
 .table {
     border-spacing: 0;
-    border-collapse: collapse;
+    border-collapse: separate;
     border: none;
-    margin: 0 !important
+    margin: 0 !important;
+	display: table;
+    width: 100%;
+    margin-bottom: 18px;
+    padding: 0;
+    font-size: .85rem;
+    position: relative;
+	border-spacing: 10px;
+	background: #2f2e2a;
 }
 
 .cbi-rowstyle-1,
@@ -575,7 +576,6 @@ fieldset>.panel-title:nth-of-type(1) {
 
 .table .tr .td,
 .table .tr .th {
-    padding: .5rem;
     white-space: nowrap
 }
 
@@ -1435,13 +1435,13 @@ input[name=nslookup] {
     border: none
 }
 
-.node-status-overview table>tbody>tr {
+.table .tr {
     background-color: #2f2e2a;
     border-top: 1px solid #3f3e3a;
     border-bottom: 1px solid #1f1e1a
 }
 
-.node-status-overview table>tbody>tr:nth-of-type(2n) {
+.table .tr:nth-of-type(2n) {
     background-color: #3f3e3a;
     border-top: 1px solid #4f4e4a;
     border-bottom: 1px solid #1f1e1a
@@ -1554,10 +1554,9 @@ input[name=nslookup] {
     font-size: .8rem
 }
 
-#cbi-firewall-redirect table *,
-#cbi-firewall-zone table *,
-#cbi-network-switch_vlan table * {
-    font-size: small
+[data-tab="iptables"] .table {
+    font-size: 90%;
+	border-spacing: 1px;
 }
 
 #cbi-firewall-redirect table input[type=text],
@@ -1939,7 +1938,7 @@ textarea {
         font-size: .9rem
     }
 
-    .panel-title {
+    .cbi-section>h3 {
         font-size: 1.4rem
     }
 
@@ -2354,13 +2353,10 @@ body.modal-overlay-active #modal_overlay {
 }
 
 .cbi-progressbar {
- border:1px solid #000;
- border-radius:3px;
  position:relative;
  min-width:170px;
  height:20px;
  background:#1f1e1a;
- margin:4px 0
 }
 .cbi-progressbar > div {
  background:#5f6e10;
@@ -2379,5 +2375,4 @@ body.modal-overlay-active #modal_overlay {
  white-space:pre;
  overflow:hidden;
  text-overflow:ellipsis
-}
 }
